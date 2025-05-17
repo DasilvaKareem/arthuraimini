@@ -25,11 +25,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Check if auth is available (client-side only)
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
+
     // Handle auth state changes
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
       if (authUser) {
         // User is signed in
         setUser(authUser);
+        setLoading(false);
       } else {
         // No user is signed in, automatically sign in anonymously
         signInAnonymousUser()
@@ -38,16 +45,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               console.log('Signed in anonymously:', anonymousUser.uid);
               setUser(anonymousUser);
             }
+            setLoading(false);
           })
           .catch((error) => {
             console.error('Error signing in anonymously:', error);
+            setLoading(false);
           });
       }
-      setLoading(false);
     });
 
     // Cleanup subscription
-    return () => unsubscribe();
+    return () => unsubscribe && unsubscribe();
   }, []);
 
   return (

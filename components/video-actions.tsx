@@ -9,7 +9,7 @@ import { usdcContractConfig, getTransferArgs } from "@/lib/token-service"
 
 interface VideoActionsProps {
   video: {
-    id: number
+    id: string | number
     likes: number
     comments: number
     username: string
@@ -32,7 +32,7 @@ export default function VideoActions({ video, onCommentClick }: VideoActionsProp
   }
 
   // Tip amount options
-  const tipAmounts = ["5", "10", "20", "50", "100"]
+  const tipAmounts = ["1", "3", "5", "10", "25"]
 
   // Get creator's address from the username
   const creatorAddress = creatorAddresses[video.username] || creatorAddresses["@creativeminds"]

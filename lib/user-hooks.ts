@@ -11,7 +11,7 @@ export const useStoreAnonymousUser = () => {
 
   useEffect(() => {
     const storeUser = async () => {
-      if (user && !loading) {
+      if (user && !loading && db) {
         const userRef = doc(db, 'users', user.uid);
         const userSnap = await getDoc(userRef);
 
@@ -41,7 +41,7 @@ export const useStoreAnonymousUser = () => {
 
 // Function to update user information when wallet is connected
 export const updateUserWalletAddress = async (uid: string, walletAddress: string) => {
-  if (!uid || !walletAddress) return;
+  if (!uid || !walletAddress || !db) return;
   
   try {
     const userRef = doc(db, 'users', uid);
