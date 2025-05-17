@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #111111;
+  --background: #111111;
+  --foreground: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -12,6 +12,18 @@
     --background: #111111;
     --foreground: #ffffff;
   }
+}
+
+/* Basic document settings */
+html, body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 body {
@@ -22,4 +34,135 @@ body {
   font-weight: 400;
   font-style: normal;
   font-size: 80%;
+  touch-action: pan-y;
+}
+
+/* Prevent text selection when swiping */
+* {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Enable text selection within comments */
+[data-no-swipe] * {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* Video transitions */
+.slide-up-out {
+  animation: slideUpOut 0.3s forwards;
+}
+
+.slide-down-out {
+  animation: slideDownOut 0.3s forwards;
+}
+
+@keyframes slideUpOut {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100vh);
+  }
+}
+
+@keyframes slideDownOut {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* Slow bounce animation */
+@keyframes bounceSlow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounceSlow 2s infinite ease-in-out;
+}
+
+/* Animation keyframes */
+@keyframes slideUp {
+  from {
+    transform: translateY(30%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-30%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Animation classes */
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Custom animations for video transitions */
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.video-transition-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.swipe-indicator {
+  transition: all 0.2s ease;
+  will-change: transform;
 }
