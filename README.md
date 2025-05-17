@@ -110,3 +110,32 @@ To get started building your own frame, follow these steps:
 - [OnchainKit Documentation](https://docs.base.org/builderkits/onchainkit/getting-started)
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+
+## Firebase Setup and Anonymous Authentication
+
+1. Create a new Firebase project at [Firebase Console](https://console.firebase.google.com/)
+2. Add a web app to your project
+3. Copy your Firebase configuration to your `.env.local` file:
+
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your_measurement_id
+```
+
+4. Enable Anonymous Authentication in the Firebase Console:
+   - Go to Authentication > Sign-in method
+   - Enable "Anonymous" as a sign-in provider
+
+5. Create Firestore Database:
+   - Go to Firestore Database
+   - Create database (start in test mode for development)
+
+The application will automatically:
+- Sign in users anonymously on their first visit
+- Store user information in Firestore
+- Update user information when they connect a wallet

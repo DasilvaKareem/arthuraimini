@@ -2,8 +2,30 @@
 
 import { Avatar, Name } from "@coinbase/onchainkit/identity"
 import { Wallet, ConnectWallet, WalletDropdown, WalletDropdownDisconnect } from "@coinbase/onchainkit/wallet"
+import { useAccount } from "wagmi"
+import { useEffect } from "react"
+import { useAuth } from "@/lib/auth-context"
+import { updateUserWalletAddress } from "@/lib/user-hooks"
 
 export function WalletConnect() {
+  const { user } = useAuth()
+  const { address, isConnected } = useAccount()
+
+  // When wallet gets connected, update the user's information in Firestore
+  useEffect(() => {
+    if (isConnected && address && user) {
+      updateUserWalletAddress(user.uid, address)
+        .then((success) => {
+          if (success) {
+            console.log("Wallet info updated in Firebase")
+          }
+        })
+        .catch((error) => {
+          console.error("Error updating wallet info:", error)
+        })
+    }
+  }, [isConnected, address, user])
+
   return (
     <div className="flex justify-center">
       <Wallet>

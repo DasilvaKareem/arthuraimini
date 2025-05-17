@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can read and write their own documents
+    match /users/{userId} {
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null;
+    }
+    
+    // Stories collection rules
+    match /stories/{storyId} {
+      // Anyone can read stories
+      allow read: if true;
+      // Only authenticated users can create stories
+      allow create: if request.auth != null;
+      // Only the creator can update or delete their stories
+      allow update, delete: if request.auth != null && request.auth.uid == resource.data.creatorId;
+    }
+  }
+} 
