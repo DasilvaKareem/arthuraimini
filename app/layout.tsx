@@ -39,18 +39,18 @@ export async function generateMetadata(): Promise<Metadata> {
     viewport: "width=device-width, initial-scale=1, maximum-scale=1",
     other: {
       "fc:frame": JSON.stringify({
-        version: "next",
-        imageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE || "/arthur-hero.jpg",
-        button: {
-          title: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "Arthur"}`,
-          action: {
-            type: "launch_frame",
-            name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "Arthur",
-            url: URL,
-            splashImageUrl: process.env.NEXT_PUBLIC_SPLASH_IMAGE || "/splash.jpg",
-            splashBackgroundColor: process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#000000",
-          },
-        },
+        version: "1",
+        image: process.env.NEXT_PUBLIC_APP_HERO_IMAGE || "/arthur-hero.jpg",
+        buttons: [
+          {
+            label: `Launch ${process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "Arthur"}`,
+            action: "post_redirect"
+          }
+        ],
+        post_url: `${URL}/api/webhook`,
+        input: {
+          text: "Tell us what you think!"
+        }
       }),
     },
   };

@@ -1,19 +1,19 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { baseSepolia } from "wagmi/chains";
-import { OnchainKitProvider } from "@coinbase/onchainkit";
+import { base } from "wagmi/chains";
+import { MiniKitProvider } from "@coinbase/onchainkit/minikit";
 import { AuthProvider } from "@/lib/auth-context";
 
 export function Providers(props: { children: ReactNode }) {
   return (
-    <OnchainKitProvider
+    <MiniKitProvider
       apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
-      chain={baseSepolia}
+      chain={base}
     >
       <AuthProvider>
         {props.children}
       </AuthProvider>
-    </OnchainKitProvider>
+    </MiniKitProvider>
   );
 }

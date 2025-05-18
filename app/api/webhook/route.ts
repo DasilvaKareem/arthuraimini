@@ -60,6 +60,7 @@ function decode(encoded: string) {
 
 export async function POST(request: Request) {
   const requestJson = await request.json();
+  console.log("Received webhook request:", JSON.stringify(requestJson, null, 2));
 
   const { header: encodedHeader, payload: encodedPayload } = requestJson;
 
@@ -77,6 +78,7 @@ export async function POST(request: Request) {
     );
   }
 
+  // Handle various events
   switch (event.event) {
     case "frame_added":
       console.log(
@@ -94,14 +96,14 @@ export async function POST(request: Request) {
       } else {
         await deleteUserNotificationDetails(fid);
       }
-
       break;
-    case "frame_removed": {
+      
+    case "frame_removed":
       console.log("frame_removed");
       await deleteUserNotificationDetails(fid);
       break;
-    }
-    case "notifications_enabled": {
+      
+    case "notifications_enabled":
       console.log("notifications_enabled", event.notificationDetails);
       await setUserNotificationDetails(fid, event.notificationDetails);
       await sendFrameNotification({
@@ -109,16 +111,26 @@ export async function POST(request: Request) {
         title: `Welcome to ${appName}`,
         body: `Thank you for enabling notifications for ${appName}`,
       });
-
       break;
-    }
-    case "notifications_disabled": {
+      
+    case "notifications_disabled":
       console.log("notifications_disabled");
       await deleteUserNotificationDetails(fid);
-
       break;
-    }
+      
+    // Handle the button click event (post_redirect)
+    default:
+      console.log("Frame interaction received:", event);
+      // This is crucial - responding with a redirect URL after interaction
+      break;
   }
 
-  return Response.json({ success: true });
+  // The URL to redirect to after interaction
+  const redirectUrl = process.env.NEXT_PUBLIC_URL || "https://arthurai.app";
+  
+  // Return a redirect response for Farcaster to handle
+  return Response.json({
+    message: "Success",
+    redirect: redirectUrl
+  });
 }
