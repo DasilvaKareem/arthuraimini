@@ -282,7 +282,8 @@ export default function VideoFeed() {
           id: currentVideo.id,
           likes: currentVideo.likes,
           comments: currentVideo.comments,
-          username: currentVideo.username
+          username: currentVideo.username,
+          authorId: currentVideo.authorId
         }} 
         onCommentClick={toggleComments} 
       />

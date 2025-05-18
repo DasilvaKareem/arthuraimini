@@ -80,6 +80,7 @@ export interface VideoData {
   aspectRatio: string;
   title?: string;
   authorName?: string;
+  authorId?: string;
   tags?: string[];
 }
 
@@ -190,6 +191,7 @@ export const listVideos = async (): Promise<VideoData[]> => {
         comments: Math.floor(Math.random() * 100) + 5,
         aspectRatio: "16:9",
         authorName: authorName,
+        authorId: story.authorId || "gmbtygRco4Vl41gCNaWRzR4q9k02", // Use the provided default author ID if none exists
         tags: story.tags
       } as VideoData;
       
