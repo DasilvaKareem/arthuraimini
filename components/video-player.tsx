@@ -275,7 +275,7 @@ export default function VideoPlayer({ video, onVideoEnd }: VideoPlayerProps) {
     if (error) {
       setShowControls(true);
     }
-  }, [error]);
+  }, [error, setShowControls]);
 
   console.log(`VideoPlayer render complete for ${video.id}`)
   return (

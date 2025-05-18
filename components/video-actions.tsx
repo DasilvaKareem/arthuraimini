@@ -53,7 +53,7 @@ export default function VideoActions({ video, onCommentClick }: VideoActionsProp
     if (txError) {
       setTxError(null);
     }
-  }, [selectedAmount]);
+  }, [selectedAmount, txError]);
 
   // Fetch creator's wallet address from Firebase when needed
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function VideoActions({ video, onCommentClick }: VideoActionsProp
     };
 
     fetchCreatorWalletAddress();
-  }, [showTipDialog, video.authorId, video.username, creatorWalletAddress]);
+  }, [showTipDialog, video.authorId, video.username, creatorWalletAddress, fallbackAddresses]);
 
   // Reset chain error when chain changes
   useEffect(() => {

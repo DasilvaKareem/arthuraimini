@@ -4,7 +4,7 @@ import VideoFeed from "@/components/video-feed"
 import { ArrowUp, ArrowDown, MousePointerClick } from "lucide-react"
 import { WalletConnect } from "@/components/ui/wallet-connect"
 import { useMiniKit } from '@coinbase/onchainkit/minikit';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 
 export default function Home() {
