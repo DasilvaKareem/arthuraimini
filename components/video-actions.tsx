@@ -5,7 +5,7 @@ import { Heart, MessageCircle, DollarSign, Check, AlertCircle, XCircle } from "l
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useChainId, useSwitchChain } from "wagmi"
-import { baseSepolia } from "wagmi/chains"
+import { base } from "wagmi/chains"
 import { usdcContractConfig, getTransferArgs } from "@/lib/token-service"
 import { db } from "@/lib/firebase"
 import { doc, getDoc } from "firebase/firestore"
@@ -36,7 +36,7 @@ export default function VideoActions({ video, onCommentClick }: VideoActionsProp
   const { switchChain, isPending: isSwitchingChain } = useSwitchChain()
 
   // Check if user is on the correct chain (Base)
-  const isCorrectChain = chainId === baseSepolia.id
+  const isCorrectChain = chainId === base.id
 
   // Fallback creator addresses based on username - used if Firebase query fails
   const fallbackAddresses: Record<string, string> = {
@@ -193,7 +193,7 @@ export default function VideoActions({ video, onCommentClick }: VideoActionsProp
   const handleSwitchToBase = async () => {
     try {
       setChainSwitchError(null);
-      await switchChain({ chainId: baseSepolia.id });
+      await switchChain({ chainId: base.id });
     } catch (error) {
       console.error("Error switching chain:", error);
       setChainSwitchError("Failed to switch to Base network. Please try again or switch manually.");

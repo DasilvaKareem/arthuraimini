@@ -3,8 +3,20 @@
 import VideoFeed from "@/components/video-feed"
 import { ArrowUp, ArrowDown, MousePointerClick } from "lucide-react"
 import { WalletConnect } from "@/components/ui/wallet-connect"
+import { useMiniKit } from '@coinbase/onchainkit/minikit';
+import { useEffect, useState } from 'react';
+
 
 export default function Home() {
+
+  const { setFrameReady, isFrameReady } = useMiniKit();
+ 
+  // The setFrameReady() function is called when your mini-app is ready to be shown
+  useEffect(() => {
+    if (!isFrameReady) {
+      setFrameReady();
+    }
+  }, [setFrameReady, isFrameReady]);
   return (
     <main className="flex min-h-[100dvh] w-full flex-col items-center justify-center bg-black text-white overflow-hidden overscroll-none">
       {/* Wallet Connect - Increased z-index to 50 to ensure it's above everything */}
