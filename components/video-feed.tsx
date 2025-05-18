@@ -4,41 +4,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import VideoPlayer from "@/components/video-player"
 import VideoActions from "@/components/video-actions"
-import { listVideos, type VideoData } from "@/lib/firebase"
-
-// Guaranteed working sample videos from a public CDN
-const SAMPLE_VIDEOS: VideoData[] = [
-  {
-    id: "sample1",
-    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    username: "@creativeminds",
-    description: "Big Buck Bunny - Open source animated short",
-    likes: 1243,
-    comments: 89,
-    aspectRatio: "16:9",
-    title: "Big Buck Bunny",
-  },
-  {
-    id: "sample2",
-    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-    username: "@techexplorer",
-    description: "Elephant's Dream - First Blender open movie",
-    likes: 4521,
-    comments: 132,
-    aspectRatio: "16:9",
-    title: "Elephant's Dream",
-  },
-  {
-    id: "sample3",
-    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-    username: "@aimasters",
-    description: "For Bigger Blazes - Sample video",
-    likes: 892,
-    comments: 45,
-    aspectRatio: "16:9",
-    title: "For Bigger Blazes",
-  },
-];
+import { listVideos, type VideoData, SAMPLE_VIDEOS } from "@/lib/firebase"
 
 export default function VideoFeed() {
   // State variables

@@ -6,18 +6,55 @@ import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 // Your Firebase configuration
 // Replace these with your actual Firebase credentials
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "",
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || ""
 };
 
 // Check if we're running on the client and have a valid API key
 const isBrowser = typeof window !== 'undefined';
 const hasValidConfig = !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+
+// Fallback sample videos for when Firebase is not available
+const SAMPLE_VIDEOS = [
+  {
+    id: "sample1",
+    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    username: "@creativeminds",
+    description: "Big Buck Bunny - Open source animated short",
+    likes: 1243,
+    comments: 89,
+    aspectRatio: "16:9",
+    title: "Big Buck Bunny",
+    tags: ["animation", "open-source"]
+  },
+  {
+    id: "sample2",
+    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    username: "@techexplorer",
+    description: "Elephant's Dream - First Blender open movie",
+    likes: 4521,
+    comments: 132,
+    aspectRatio: "16:9",
+    title: "Elephant's Dream",
+    tags: ["animation", "blender"]
+  },
+  {
+    id: "sample3",
+    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    username: "@aimasters",
+    description: "For Bigger Blazes - Sample video",
+    likes: 892,
+    comments: 45,
+    aspectRatio: "16:9",
+    title: "For Bigger Blazes",
+    tags: ["demo", "sample"]
+  },
+];
 
 // Initialize Firebase only on client side with valid config
 const firebaseApp = isBrowser && hasValidConfig
@@ -150,6 +187,12 @@ export const fetchPublishedStories = async (limitCount = 10): Promise<PublishedS
 // Main function to list videos from Firebase for the feed
 export const listVideos = async (): Promise<VideoData[]> => {
   try {
+    // Return sample videos if Firebase is not available
+    if (!db || !storage) {
+      console.log("⚠️ DEBUG: Firebase not initialized. Using sample videos instead.");
+      return SAMPLE_VIDEOS;
+    }
+    
     // Fetch published stories with videos
     console.log("🔍 DEBUG: Starting to fetch published stories...");
     const stories = await fetchPublishedStories(20);
@@ -166,8 +209,8 @@ export const listVideos = async (): Promise<VideoData[]> => {
     })));
     
     if (videoStories.length === 0) {
-      console.log("❌ DEBUG: No videos found in published stories");
-      return [];
+      console.log("❌ DEBUG: No videos found in published stories, using sample videos");
+      return SAMPLE_VIDEOS;
     }
     
     // Map each story with video to VideoData format
@@ -210,14 +253,14 @@ export const listVideos = async (): Promise<VideoData[]> => {
       videos.forEach((video, i) => {
         console.log(`  ${i+1}. ${video.title} (${video.id}): ${video.url?.substring(0, 50)}...`);
       });
+      return videos;
     } else {
-      console.log("❌ DEBUG: No videos found in Firebase");
+      console.log("❌ DEBUG: No videos found in Firebase, using sample videos");
+      return SAMPLE_VIDEOS;
     }
-    
-    return videos;
   } catch (error) {
     console.error('Error listing videos from Firebase:', error);
-    return [];
+    return SAMPLE_VIDEOS;
   }
 };
 
@@ -257,4 +300,4 @@ export const getVideoURL = async (videoPath: string): Promise<string | null> => 
 };
 
 // Export Firebase instances
-export { auth, db, storage, firebaseApp }; 
+export { auth, db, storage, firebaseApp, SAMPLE_VIDEOS }; 

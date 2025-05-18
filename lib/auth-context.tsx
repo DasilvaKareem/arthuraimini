@@ -27,35 +27,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Check if auth is available (client-side only)
     if (!auth) {
+      console.log('Firebase auth not available, continuing as anonymous user');
       setLoading(false);
       return;
     }
 
-    // Handle auth state changes
-    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      if (authUser) {
-        // User is signed in
-        setUser(authUser);
-        setLoading(false);
-      } else {
-        // No user is signed in, automatically sign in anonymously
-        signInAnonymousUser()
-          .then((anonymousUser) => {
-            if (anonymousUser) {
-              console.log('Signed in anonymously:', anonymousUser.uid);
-              setUser(anonymousUser);
-            }
-            setLoading(false);
-          })
-          .catch((error) => {
-            console.error('Error signing in anonymously:', error);
-            setLoading(false);
-          });
-      }
-    });
+    let unsubscribe: (() => void) | undefined;
+
+    try {
+      // Handle auth state changes
+      unsubscribe = onAuthStateChanged(auth, (authUser) => {
+        if (authUser) {
+          // User is signed in
+          console.log('User is signed in:', authUser.uid);
+          setUser(authUser);
+          setLoading(false);
+        } else {
+          // No user is signed in, automatically sign in anonymously
+          signInAnonymousUser()
+            .then((anonymousUser) => {
+              if (anonymousUser) {
+                console.log('Signed in anonymously:', anonymousUser.uid);
+                setUser(anonymousUser);
+              }
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.error('Error signing in anonymously:', error);
+              setLoading(false);
+            });
+        }
+      });
+    } catch (error) {
+      console.error('Error setting up auth state listener:', error);
+      setLoading(false);
+    }
 
     // Cleanup subscription
-    return () => unsubscribe && unsubscribe();
+    return () => {
+      if (unsubscribe) {
+        try {
+          unsubscribe();
+        } catch (error) {
+          console.error('Error unsubscribing from auth state changes:', error);
+        }
+      }
+    };
   }, []);
 
   return (
